@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '364250418374',
     projectId: 'my-development-project-2',
     storageBucket: 'my-development-project-2.appspot.com',
+    androidClientId: '364250418374-v0l41i35h7l45689je7t8vpfvhtek2h4.apps.googleusercontent.com',
+    iosClientId: '364250418374-4vm8950l9ft7h0iibki4foniher1d7cu.apps.googleusercontent.com',
     iosBundleId: 'com.kronk.kronk',
   );
+
 }

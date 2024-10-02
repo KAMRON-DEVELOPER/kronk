@@ -12,7 +12,20 @@
           "package_name": "com.kronk.kronk"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "364250418374-v0l41i35h7l45689je7t8vpfvhtek2h4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kronk.kronk",
+            "certificate_hash": "2da7729d18b872f7d27a91629e346e6d917abba7"
+          }
+        },
+        {
+          "client_id": "364250418374-ao1rasc4eu9avphq72eu66d6jtgg825p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBISoq1UgrN5wcNYyZU7-88DoDFixg2K3c"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364250418374-ao1rasc4eu9avphq72eu66d6jtgg825p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "364250418374-4vm8950l9ft7h0iibki4foniher1d7cu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kronk.kronk"
+              }
+            }
+          ]
         }
       }
     }
