@@ -65,7 +65,7 @@ class FirebaseAuthService {
         User? currentUser = _firebaseAuth.currentUser;
         String? firebaseUserIdToken = await currentUser?.getIdToken();
         bool isSendToBackend = await authApiService.fetchGoogleSignIn(firebaseUserIdToken: firebaseUserIdToken);
-        print("isSendToBackend: $isSendToBackend");
+        print("🥳 isSendToBackend: $isSendToBackend");
       }
     } catch (e) {
       print("🥶 an error occurred during Google Sign-In: $e");
@@ -78,13 +78,13 @@ class FirebaseAuthService {
     try {
       // sign out in Firebase
       await _firebaseAuth.signOut();
-      print("User signed out from Firebase.");
+      print("🥳 User signed out from Firebase.");
 
       // sign out in Google Sign-In
       await googleSignIn.signOut();
-      print("User signed out from Google.");
+      print("🥳 User signed out from Google.");
     } catch (e) {
-      print("An error occurred during sign out: $e");
+      print("🥶 An error occurred during sign out: $e");
     }
   }
 }

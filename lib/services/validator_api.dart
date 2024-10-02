@@ -17,7 +17,7 @@ class ValidateApiService {
   Future<void> fetchAndStoreUsersData() async {
     try {
       Response response = await _dio.get('$_baseUrl/all/');
-      print('RESPONSE IN fetchAndStoreUserData: ${response.data}');
+      print('📝 RESPONSE IN fetchAndStoreUserData: ${response.data}');
       if (response.statusCode == 200) {
         final List<dynamic> data = response.data;
         List<Users?> users = data.map((user) => Users.toUsers(user)).toList();

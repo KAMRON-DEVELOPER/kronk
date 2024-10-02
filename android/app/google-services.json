@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1000875999791:android:bd702c24505da5a8e17cda",
         "android_client_info": {
-          "package_name": "com.example.kronk"
+          "package_name": "com.kronk.kronk"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "1000875999791-i7r5dnrltirkorj15pojajfcve96boif.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.kronk",
+            "package_name": "com.kronk.kronk",
             "certificate_hash": "26ffd00ec8fa85e59731810bfae6977bcde925d3"
           }
         },
@@ -42,7 +42,7 @@
               "client_id": "1000875999791-ndp4i7lf7sg1ci640vte4tagn8dp58k8.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.kronk"
+                "bundle_id": "com.kronk.kronk"
               }
             }
           ]
@@ -78,7 +78,7 @@
               "client_id": "1000875999791-ndp4i7lf7sg1ci640vte4tagn8dp58k8.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.kronk"
+                "bundle_id": "com.kronk.kronk"
               }
             }
           ]

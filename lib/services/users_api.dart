@@ -8,7 +8,7 @@ class AuthApiService {
 
   AuthApiService() : _dio = Dio();
 
-  
+
   // TODO: registration
   Future<Profile?> fetchRegister({required Profile registerData}) async {
     try {
@@ -31,7 +31,7 @@ class AuthApiService {
     }
   }
 
-  // TODO: verification
+  //? verification
   Future<Profile?> fetchVerify(
       {required Profile verifyData, required String? accessToken}) async {
     try {
@@ -60,7 +60,7 @@ class AuthApiService {
     }
   }
 
-  // TODO: login
+  //? login
   Future<Profile?> fetchLogin({required Profile loginData}) async {
     try {
       Response response = await _dio.post(
@@ -156,7 +156,7 @@ class AuthApiService {
     }
   }
 
-  // TODO: fetch banner
+  // Todo: fetch banner
   Future<MemoryImage?> fetchBanner({required String imageUrl}) async {
     try {
       final response = await _dio.get(
@@ -177,11 +177,11 @@ class AuthApiService {
     return null;
   }
 
-  // TODO: fetch google sign in
+  // Todo: fetch google sign in
   Future<bool> fetchGoogleSignIn({required String? firebaseUserIdToken}) async {
     try {
       Response response = await _dio.post(
-        '$_usersUrl/firebase-social-auth/',
+        '$_usersUrl/firebase-auth/',
         data: {"firebase_id_token": firebaseUserIdToken},
         options: Options(headers: {"Content-Type": "application/json"}),
       );
