@@ -66,6 +66,7 @@ class _ImageCropperState extends State<ImageCropper> {
 
   @override
   Widget build(BuildContext context) {
+    print(_croppedImage!= null);
     return Container(
       width: 320,
       height: 380,

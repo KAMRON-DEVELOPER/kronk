@@ -9,7 +9,7 @@ class AuthApiService {
   AuthApiService() : _dio = Dio();
 
 
-  // TODO: registration
+  // TODO
   Future<Profile?> fetchRegister({required Profile registerData}) async {
     try {
       Response response = await _dio.post(
@@ -60,7 +60,7 @@ class AuthApiService {
     }
   }
 
-  //? login
+  // TODO: login
   Future<Profile?> fetchLogin({required Profile loginData}) async {
     try {
       Response response = await _dio.post(
@@ -156,7 +156,7 @@ class AuthApiService {
     }
   }
 
-  // Todo: fetch banner
+  // TODO: fetch banner
   Future<MemoryImage?> fetchBanner({required String imageUrl}) async {
     try {
       final response = await _dio.get(
@@ -177,7 +177,7 @@ class AuthApiService {
     return null;
   }
 
-  // Todo: fetch google sign in
+  // TODO: fetch google sign in
   Future<bool> fetchGoogleSignIn({required String? firebaseUserIdToken}) async {
     try {
       Response response = await _dio.post(
