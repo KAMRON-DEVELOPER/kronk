@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CustomTheme {
   static final Map<String, MyTheme> themes = {
-    'blue': MyTheme(
+    'dark': MyTheme(
       background1: BlueColors.background1,
       background2: BlueColors.background2,
       background3: BlueColors.background3,

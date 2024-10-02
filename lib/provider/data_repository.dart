@@ -6,6 +6,7 @@ import '../models/tab.dart';
 import '../models/user.dart';
 import '../models/users.dart';
 import '../services/users_api.dart';
+import '../widgets/custom_theme.dart';
 
 class DataRepository {
   final AuthApiService authApiService;
@@ -85,6 +86,17 @@ class DataRepository {
       return false;
     }
   }
+
+  String getCurrentThemeName() {
+    return settingsBox.get('theme', defaultValue: 'dark');
+  }
+
+  MyTheme getCurrentTheme() {
+    String themeName = getCurrentThemeName();
+    MyTheme currentTheme = CustomTheme.themes[themeName] as MyTheme;
+    return currentTheme;
+  }
+
 
   // SETTERS
   Future<bool> setUsers(List<Users?> newUsers) async {
