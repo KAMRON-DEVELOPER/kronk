@@ -27,11 +27,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailOrPhoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  String? usernameError;
-  String? emailOrPhoneError;
-  String? passwordError;
-
-  double socialAuthIconSize = 64;
+  String? usernameError, emailOrPhoneError, passwordError;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String linkedinIconPath = 'assets/icons/authLinkedinDark.svg';
     String twitterxIconPath = 'assets/icons/authTwitterDark.svg';
     String githubIconPath = "assets/icons/authGithubDark.svg";
+    double socialAuthIconSize = 64;
 
     return BlocConsumer<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
@@ -109,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 16),
                   buildResetPassword(onTap: () => print('✨ Reset password')),
                   const SizedBox(height: 16),
-                  buildRegisterButton(
+                  buildAuthButton(
                     context: context,
                     authState: authState,
                     usernameError: usernameError,
@@ -143,9 +140,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     twitterxIconPath: twitterxIconPath,
                     linkedinIconPath: linkedinIconPath,
                     githubIconPath: githubIconPath,
-                    onTapOnGoogle: () => print('��‍��� Google'),
-                    onTapOnTwitterx: () => print('��‍��� Twitter'),
-                    onTapOnLinkedIn: () => print('��‍��� LinkedIn'),
+                    onTapOnGoogle: () async {
+                      await firebaseAuthService.signInWithGoogle();
+                      print('Google Sign In');
+                    },
+                    onTapOnTwitterx: () async {
+                      await firebaseAuthService.signOut();
+                      print('Google Sign Out');
+                    },
+                    onTapOnLinkedIn: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('🎈 Hello, LinkedIn!'),
+                        ),
+                      );
+                    },
                     onTapOnGithub: () => print('��‍��� Github'),
                   ),
                   const SizedBox(height: 36),

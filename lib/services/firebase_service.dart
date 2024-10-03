@@ -37,7 +37,7 @@ class FirebaseAuthService {
   }
 
 
-  void signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
@@ -72,7 +72,7 @@ class FirebaseAuthService {
     }
   }
 
-  void signOut() async {
+  Future<void> signOut() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {

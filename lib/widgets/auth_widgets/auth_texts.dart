@@ -17,6 +17,23 @@ Widget buildRegisterText() {
   );
 }
 
+Widget buildLoginText() {
+  return const Column(
+    children: [
+      Text(
+        'Login',
+        style: TextStyle(color: Colors.white, fontSize: 48),
+      ),
+      SizedBox(height: 8),
+      Text(
+        'Almost there! Please enter your username and password to continue.',
+        style: TextStyle(color: Colors.white24, fontSize: 12),
+        textAlign: TextAlign.center,
+      ),
+    ],
+  );
+}
+
 Widget buildResetPassword({required void Function() onTap}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
@@ -53,6 +70,34 @@ Widget buildAlreadyHaveAccount({required void Function() onTap}) {
         onTap: onTap,
         child: const Text(
           'Login',
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            color: Colors.green,
+            fontSize: 16,
+          ),
+        ),
+      )
+    ],
+  );
+}
+
+Widget buildDontHaveAccount({required void Function() onTap}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      const Text(
+        "Don't have an account?",
+        style: TextStyle(
+          color: Colors.white24,
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+      const SizedBox(width: 12),
+      GestureDetector(
+        onTap: onTap,
+        child: const Text(
+          'Register',
           style: TextStyle(
             fontWeight: FontWeight.w400,
             color: Colors.green,

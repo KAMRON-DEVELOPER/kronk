@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../bloc/authentication/authentication_state.dart';
 
-Widget buildRegisterButton({
+Widget buildAuthButton({
   required BuildContext context,
   required AuthenticationState authState,
   required String? usernameError,
   required String? emailOrPhoneError,
   required String? passwordError,
   required TextEditingController usernameController,
-  required TextEditingController emailOrPhoneController,
+  TextEditingController? emailOrPhoneController,
   required TextEditingController passwordController,
   required void Function() onPressed,
 }) {
@@ -31,9 +31,9 @@ Widget buildRegisterButton({
                 color: Colors.black,
               ),
             )
-          : const Text(
-              "Register",
-              style: TextStyle(
+          : Text(
+              emailOrPhoneController == null ? "Login" : "Register",
+              style: const TextStyle(
                 color: Colors.black,
               ),
             ),
@@ -51,16 +51,16 @@ Widget buildContinueWithRegisterButtons({required void Function() onTap}) {
 }
 
 Widget buildSocialButtons({
-    required double socialAuthIconSize,
-    required String googleIconPath,
-    required String twitterxIconPath,
-    required String linkedinIconPath,
-    required String githubIconPath,
-    required void Function() onTapOnGoogle,
-    required void Function() onTapOnTwitterx,
-    required void Function() onTapOnLinkedIn,
-    required void Function() onTapOnGithub,
-    }) {
+  required double socialAuthIconSize,
+  required String googleIconPath,
+  required String twitterxIconPath,
+  required String linkedinIconPath,
+  required String githubIconPath,
+  required void Function() onTapOnGoogle,
+  required void Function() onTapOnTwitterx,
+  required void Function() onTapOnLinkedIn,
+  required void Function() onTapOnGithub,
+}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
