@@ -1,51 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../models/user.dart';
 import 'users_api.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final AuthApiService authApiService = AuthApiService();
 
-  Future<User?> signUpWithEmailAndPassword(String email, String password) async {
-    try {
-      UserCredential credential = await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      return credential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'email-already-in-use') {
-        print("The email address is already in use.");
-      } else {
-        print("An error occurred: ${e.code}");
-      }
-    }
-    return null;
-  }
-
-  Future<User?> signInWithEmailAndPassword(String email, String password) async {
-    try {
-      UserCredential credential = await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-      return credential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-        print("Invalid email or password.");
-      } else {
-        print("'An error occurred: ${e.code}");
-      }
-    }
-    return null;
-  }
-
-
-  Future<String?> signInWithGoogle() async {
+  Future<Profile?> signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
       // this will show account select snake bar
-      final GoogleSignInAccount? googleSignedInAccount = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleSignedInAccount =
+          await googleSignIn.signIn();
 
       if (googleSignedInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication = await googleSignedInAccount.authentication;
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignedInAccount.authentication;
         print('🥳 googleSignedInAccount: ${googleSignedInAccount.toString()}');
         // create credential using sent by google
         final AuthCredential credential = GoogleAuthProvider.credential(
@@ -62,12 +34,16 @@ class FirebaseAuthService {
           return null;
         }
 
-        // get firebase idToken from currentUser and sendToBackend
+        // get firebase idToken from currentUser
         User? currentUser = _firebaseAuth.currentUser;
         String? firebaseUserIdToken = await currentUser?.getIdToken();
-        bool isSendToBackend = await authApiService.fetchGoogleSignIn(firebaseUserIdToken: firebaseUserIdToken);
-        print("🥳 isSendToBackend: $isSendToBackend");
-        return currentUser?.displayName;
+
+        // send idToken and fetch user data from the server
+        Profile? user = await authApiService.fetchSocialAuth(
+          firebaseUserIdToken: firebaseUserIdToken,
+        );
+        print("🥳 user: $user");
+        return user;
       }
       return null;
     } catch (e) {

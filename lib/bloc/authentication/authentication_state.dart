@@ -8,53 +8,34 @@ abstract class AuthenticationState extends Equatable {
   List<Object?> get props => [];
 }
 
+
 class AuthenticationInitial extends AuthenticationState {}
+
 
 class AuthenticationLoading extends AuthenticationState {}
 
-class AuthenticationSuccess extends AuthenticationState {
-  final Profile? registerSuccessData;
-  final Profile? verifySuccessData;
-  final Profile? loginSuccessData;
 
-  const AuthenticationSuccess({
-    this.registerSuccessData,
-    this.verifySuccessData,
-    this.loginSuccessData,
-  });
+class AuthenticationSuccess extends AuthenticationState {
+  final Profile? authSuccessData;
+
+  const AuthenticationSuccess({this.authSuccessData});
 
   @override
-  List<Object?> get props => [
-        registerSuccessData,
-        verifySuccessData,
-        loginSuccessData,
-      ];
+  List<Object?> get props => [authSuccessData];
 }
+
 
 class AuthenticationFailure extends AuthenticationState {
-  final String? registerFailureMessage;
-  final String? loginFailureMessage;
-  final String? verifyFailureMessage;
-  final String? socialAuthFailureMessage;
+  final String? authFailureMessage;
 
-  const AuthenticationFailure({
-    this.registerFailureMessage,
-    this.verifyFailureMessage,
-    this.loginFailureMessage,
-    this.socialAuthFailureMessage,
-  });
+  const AuthenticationFailure({this.authFailureMessage});
 
   @override
-  List<Object?> get props => [
-        registerFailureMessage,
-        verifyFailureMessage,
-        loginFailureMessage,
-      ];
+  List<Object?> get props => [authFailureMessage];
 }
 
-class SocialAuthSuccess extends AuthenticationState {
-  final String socialAuthSuccessMessage;
-  const SocialAuthSuccess({required this.socialAuthSuccessMessage});
+
+class AuthenticationLogout extends AuthenticationState {
 
   @override
   List<Object?> get props => [];

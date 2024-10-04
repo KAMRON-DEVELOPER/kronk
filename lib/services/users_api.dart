@@ -32,8 +32,7 @@ class AuthApiService {
   }
 
   //? verification
-  Future<Profile?> fetchVerify(
-      {required Profile verifyData, required String? accessToken}) async {
+  Future<Profile?> fetchVerify({required Profile verifyData, required String? temporaryUserToken}) async {
     try {
       Response response = await _dio.post(
         '$_usersUrl/verify/',
@@ -41,7 +40,6 @@ class AuthApiService {
         options: Options(
           headers: {
             "Content-Type": "application/json",
-            "Authorization": "Bearer $accessToken",
           },
         ),
       );
@@ -176,9 +174,8 @@ class AuthApiService {
     }
     return null;
   }
-
-  // TODO: fetch google sign in
-  Future<bool> fetchGoogleSignIn({required String? firebaseUserIdToken}) async {
+  
+  Future<Profile?> fetchSocialAuth({required String? firebaseUserIdToken}) async {
     try {
       Response response = await _dio.post(
         '$_usersUrl/firebase-auth/',
@@ -187,15 +184,15 @@ class AuthApiService {
       );
 
       if (response.statusCode == 200) {
-        print('response in fetchLogin: ${response.data.toString()}');
-        return true;
+        print('✨ response in fetchSocialAuth: ${response.data.toString()}');
+        return Profile.fromJson(response.data);
       } else {
-        print('Failed in fetchLogin: ${response.statusCode}');
-        return false;
+        print('🥶 Failed in fetchSocialAuth: ${response.statusCode}');
+        return null;
       }
     } catch (error) {
-      print('Error in fetchLogin: ${error.toString()}');
-      return false;
+      print('🥶 Error in fetchSocialAuth: ${error.toString()}');
+      return null;
     }
   }
 }

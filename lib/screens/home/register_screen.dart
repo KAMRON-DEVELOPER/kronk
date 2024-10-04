@@ -54,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               SnackBar(
                 content: Column(
                   children: [
-                    const Text('🎈 User has registered successfully!'),
+                    const Text('🥶 Social Auth Failure!'),
                     Text(errorMessage),
                   ],
                 ),

@@ -122,8 +122,8 @@ class Profile extends HiveObject {
     };
   }
 
-  Map<String, dynamic> toJsonForVerify() {
-    return {'code': code};
+  Map<String, dynamic> toJsonForVerify(String temporaryUserToken) {
+    return {'code': code, 'temporary_user_token': temporaryUserToken};
   }
 
   Map<String, dynamic> toJsonForLogin() {

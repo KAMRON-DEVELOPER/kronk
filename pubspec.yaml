@@ -14,7 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
     
-  cupertino_icons: ^1.0.8
+  cupertino_icons:
   equatable:
   path_provider:
   hive:
@@ -44,13 +44,14 @@ dependencies:
   google_sign_in:
   firebase_core:
   firebase_auth:
-  
+  flutter_cache_manager:
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
+  flutter_lints:
 
 
 flutter:

@@ -1,16 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kronk/provider/data_repository.dart';
 import '../../models/user.dart';
-import '../../services/firebase_service.dart';
 import '../../services/users_api.dart';
 import 'authentication_event.dart';
 import 'authentication_state.dart';
 
-class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> {
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthApiService _authApiService = AuthApiService();
-
-  final DataRepository dataRepository = DataRepository();
-  final FirebaseAuthService firebaseAuthService = FirebaseAuthService();
+  final DataRepository _dataRepository = DataRepository();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   AuthenticationBloc() : super(AuthenticationInitial()) {
     on<RegisterSubmitEvent>(_registerSubmitEvent);
@@ -21,103 +22,169 @@ class AuthenticationBloc extends Bloc<AuthenticationEvent, AuthenticationState> 
     on<SocialAuthEvent>(_socialAuthEvent);
   }
 
-  void _registerSubmitEvent(RegisterSubmitEvent event, Emitter<AuthenticationState> emit) async {
-    print('_registerSubmitEvent');
-    emit(AuthenticationLoading());
-    try {
-      final Profile? registerSuccessData =
-          await _authApiService.fetchRegister(registerData: event.registerData);
-      if (registerSuccessData != null) {
-        await dataRepository.setSettingsAll({
-          "accessToken": registerSuccessData.accessToken,
-          "refreshToken": registerSuccessData.refreshToken,
-        });
-        emit(AuthenticationSuccess(registerSuccessData: registerSuccessData));
-      } else {
-        emit(
-          const AuthenticationFailure(
-              registerFailureMessage: 'Register failed'),
-        );
-      }
-    } catch (error) {
-      emit(
-        const AuthenticationFailure(
-            registerFailureMessage:
-                'An unknown error occurred while registering'),
-      );
-    }
-  }
 
-  void _verifySubmitEvent(VerifySubmitEvent event, Emitter<AuthenticationState> emit) async {
-    print('_registerSubmitEvent');
+  void _registerSubmitEvent(RegisterSubmitEvent event, Emitter<AuthenticationState> emit) async {
     emit(AuthenticationLoading());
-    String? accessToken = await dataRepository.getAccessToken();
+
     try {
-      final Profile? verifySuccessData = await _authApiService.fetchVerify(
-        verifyData: event.verifyData,
-        accessToken: accessToken,
-      );
-      if (verifySuccessData != null) {
-        await dataRepository.setSettingsAll({
-          "accessToken": verifySuccessData.accessToken,
-          "refreshToken": verifySuccessData.refreshToken,
+      final Profile? registeredUser = await _authApiService.fetchRegister(registerData: event.registerData);
+      if (registeredUser != null) {
+        await _dataRepository.setSettingsAll({
+          "accessToken": registeredUser.accessToken,
+          "refreshToken": registeredUser.refreshToken,
           "isAuthenticated": true,
         });
-        emit(AuthenticationSuccess(registerSuccessData: verifySuccessData));
+        emit(AuthenticationSuccess(authSuccessData: registeredUser));
       } else {
+        print('🥶 Register failed');
         emit(
           const AuthenticationFailure(
-              registerFailureMessage: 'Verification failed'),
+              authFailureMessage: '🥶 an error occurred while registering',
+          ),
         );
       }
-    } catch (error) {
+    } catch (e) {
+      print('🥶 Register failed: $e');
       emit(
         const AuthenticationFailure(
-            registerFailureMessage:
-                'An unknown error occurred while registering'),
+            authFailureMessage: '🥶 an error occurred while registering',
+        ),
       );
     }
   }
 
+  
+  void _verifySubmitEvent(VerifySubmitEvent event, Emitter<AuthenticationState> emit) async {
+    emit(AuthenticationLoading());
+
+    String? temporaryUserToken = await _dataRepository.getTemporaryUserToken();
+    try {
+      final Profile? verifiedUser = await _authApiService.fetchVerify(
+        verifyData: event.verifyData,
+        temporaryUserToken: temporaryUserToken,
+      );
+      if (verifiedUser != null) {
+        await _dataRepository.setSettingsAll({
+          "accessToken": verifiedUser.accessToken,
+          "refreshToken": verifiedUser.refreshToken,
+          "isAuthenticated": true,
+        });
+        emit(AuthenticationSuccess(authSuccessData: verifiedUser));
+      } else {
+        print('🥶 verification failed');
+        emit(
+          const AuthenticationFailure(
+              authFailureMessage: '🥶 verification failed',
+          ),
+        );
+      }
+    } catch (e) {
+      emit(
+        AuthenticationFailure(
+            authFailureMessage: '🥶 an error occurred while verifying: $e',
+        ),
+      );
+    }
+  }
+
+  
   void _loginSubmitEvent(LoginSubmitEvent event, Emitter<AuthenticationState> emit) async {
     emit(AuthenticationLoading());
+
     try {
-      final Profile? loginSuccessData =
-          await _authApiService.fetchLogin(loginData: event.loginData);
-      if (loginSuccessData != null) {
-        await dataRepository.setSettingsAll({
-          "accessToken": loginSuccessData.accessToken,
-          "refreshToken": loginSuccessData.refreshToken,
+      final Profile? loggedInUser = await _authApiService.fetchLogin(loginData: event.loginData);
+      if (loggedInUser != null) {
+        await _dataRepository.setSettingsAll({
+          "accessToken": loggedInUser.accessToken,
+          "refreshToken": loggedInUser.refreshToken,
           "isAuthenticated": true,
         });
-        emit(AuthenticationSuccess(loginSuccessData: loginSuccessData));
+        emit(AuthenticationSuccess(authSuccessData: loggedInUser));
       } else {
-        emit(const AuthenticationFailure(loginFailureMessage: 'Login failed'));
+        emit(const AuthenticationFailure(authFailureMessage: '🥶 Login failed'));
       }
-    } catch (error) {
+    } catch (e) {
+      print('🥶 An error occurred while logging: $e');
       emit(
-        const AuthenticationFailure(
-            loginFailureMessage: 'An unknown error occurred while logging'),
+        AuthenticationFailure(
+            authFailureMessage: '🥶 An unknown error occurred while logging: $e',
+        ),
       );
     }
   }
 
+  
   void _forgotPasswordSubmitEvent(ForgotPasswordSubmitEvent event, Emitter<AuthenticationState> emit) async {}
 
+  
   void _logoutEvent(LogoutEvent event, Emitter<AuthenticationState> emit) async {
-    await dataRepository.clearSettings();
-    // TODO: emit(AuthenticationLoggedOut());
+    print('🗑️ User logged out and data is wiped');
+    await _dataRepository.clearSettings();
+    emit(AuthenticationLogout());
   }
 
+  
   void _socialAuthEvent(SocialAuthEvent event, Emitter<AuthenticationState> emit) async {
-    String socialProvider = event.socialProvider;
+    String socialAuthProvider = event.socialProvider;
     emit(AuthenticationLoading());
-    if (socialProvider == 'google') {
-      String? signedInUser = await firebaseAuthService.signInWithGoogle();
-      if (signedInUser != null) {
-        emit(SocialAuthSuccess(socialAuthSuccessMessage: "Signed in user: $signedInUser"));
+
+    if (socialAuthProvider == 'google') {
+      _providerGoogleAuth(event, emit);
+    }
+  }
+
+  
+  _providerGoogleAuth(SocialAuthEvent event, Emitter<AuthenticationState> emit) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+
+    try {
+      // this will show account select snake bar
+      final GoogleSignInAccount? selectedGoogleAccount = await googleSignIn.signIn();
+
+      if (selectedGoogleAccount != null) {
+        // get the authentication token from googleSignInAccount to create credential
+        final GoogleSignInAuthentication retrievedGoogleAccount = await selectedGoogleAccount.authentication;
+        // create credential with google's idToken and accessToken
+        final AuthCredential firebaseCredential = GoogleAuthProvider.credential(
+          idToken: retrievedGoogleAccount.idToken,
+          accessToken: retrievedGoogleAccount.accessToken,
+        );
+
+        // sign in with Google's credential in FirebaseAuth
+        try {
+          await _firebaseAuth.signInWithCredential(firebaseCredential);
+        } catch (e) {
+          print('🥶 an error occurred during Firebase Auth: $e');
+          emit(AuthenticationFailure(
+            authFailureMessage: '🥶 an error occurred during Firebase Auth: $e',
+          ),
+          );
+        }
+
+        // get firebase idToken from signInWithCredential -> user
+        User? signedInWithCredentialUser = _firebaseAuth.currentUser;
+        String? firebaseUserIdToken = await signedInWithCredentialUser?.getIdToken();
+
+        // send idToken and fetch user data from the server
+        Profile? user = await _authApiService.fetchSocialAuth(
+          firebaseUserIdToken: firebaseUserIdToken,
+        );
+        print("🥳 user signed in successfully: ${user?.username}");
+        emit(AuthenticationSuccess(authSuccessData: user));
+      } else {
+        emit(
+          const AuthenticationFailure(
+            authFailureMessage: '🥶 Google sign-in failed',
+          ),
+        );
       }
-      emit(const AuthenticationFailure(socialAuthFailureMessage: 'Google sign-in failed'));
+    } catch (e) {
+      print("🥶 an error occurred during Google Sign-In: $e");
+      return emit(
+        AuthenticationFailure(
+          authFailureMessage: '🥶 an error occurred during Google Sign-In: $e',
+        ),
+      );
     }
   }
 }

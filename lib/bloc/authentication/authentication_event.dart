@@ -8,6 +8,7 @@ abstract class AuthenticationEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+
 class RegisterSubmitEvent extends AuthenticationEvent {
   final Profile registerData;
 
@@ -16,6 +17,7 @@ class RegisterSubmitEvent extends AuthenticationEvent {
   @override
   List<Object> get props => [registerData];
 }
+
 
 class VerifySubmitEvent extends AuthenticationEvent {
   final Profile verifyData;
@@ -26,18 +28,25 @@ class VerifySubmitEvent extends AuthenticationEvent {
   List<Object> get props => [verifyData];
 }
 
+
 class LoginSubmitEvent extends AuthenticationEvent {
   final Profile loginData;
-
   const LoginSubmitEvent({required this.loginData});
 
   @override
   List<Object> get props => [loginData];
 }
 
-class LogoutEvent extends AuthenticationEvent {}
+
+class LogoutEvent extends AuthenticationEvent {
+
+  @override
+  List<Object> get props => [];
+}
+
 
 class ForgotPasswordSubmitEvent extends AuthenticationEvent {}
+
 
 class SocialAuthEvent extends AuthenticationEvent {
   final String socialProvider;
