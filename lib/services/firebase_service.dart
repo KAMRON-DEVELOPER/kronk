@@ -37,7 +37,7 @@ class FirebaseAuthService {
   }
 
 
-  Future<void> signInWithGoogle() async {
+  Future<String?> signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
 
     try {
@@ -59,6 +59,7 @@ class FirebaseAuthService {
           print('🥳 User signed in with Google');
         } catch (e) {
           print('🥶 Failed to authenticate with Firebase: $e');
+          return null;
         }
 
         // get firebase idToken from currentUser and sendToBackend
@@ -66,9 +67,12 @@ class FirebaseAuthService {
         String? firebaseUserIdToken = await currentUser?.getIdToken();
         bool isSendToBackend = await authApiService.fetchGoogleSignIn(firebaseUserIdToken: firebaseUserIdToken);
         print("🥳 isSendToBackend: $isSendToBackend");
+        return currentUser?.displayName;
       }
+      return null;
     } catch (e) {
       print("🥶 an error occurred during Google Sign-In: $e");
+      return null;
     }
   }
 

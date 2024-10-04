@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:kronk/widgets/auth_widgets/auth_fields.dart';
 import 'package:kronk/widgets/auth_widgets/auth_icons.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +10,6 @@ import '../../models/user.dart';
 import '../../provider/data_repository.dart';
 import '../../provider/toggle_settings_provider.dart';
 import '../../services/firebase_service.dart';
-import '../../services/validator_api.dart';
 import '../../utils/realtime_validators.dart';
 import '../../widgets/auth_widgets/auth_texts.dart';
 

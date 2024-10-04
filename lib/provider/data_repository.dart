@@ -303,6 +303,10 @@ class DataRepository {
     }
   }
 
+  Future<void> clearSettings() async {
+    settingsBox.clear();
+  }
+
   void dispose() {
     _timer?.cancel();
   }

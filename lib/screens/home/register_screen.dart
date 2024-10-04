@@ -7,7 +7,6 @@ import '../../bloc/authentication/authentication_bloc.dart';
 import '../../bloc/authentication/authentication_event.dart';
 import '../../bloc/authentication/authentication_state.dart';
 import '../../models/user.dart';
-import '../../services/firebase_service.dart';
 import '../../utils/realtime_validators.dart';
 import '../../widgets/auth_widgets/auth_texts.dart';
 
@@ -20,8 +19,6 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final DataRepository dataRepository = DataRepository();
-
-  final FirebaseAuthService firebaseAuthService = FirebaseAuthService();
 
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailOrPhoneController = TextEditingController();
@@ -49,8 +46,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
           } catch (error) {
             print('🌋 unexpected error >> $error');
           }
-        } else if (state == const AuthenticationFailure()) {
+        } else if (state is AuthenticationFailure) {
           print('🥶 ERROR OCCURRED');
+          if (state.socialAuthFailureMessage != null) {
+            String errorMessage = state.socialAuthFailureMessage!;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Column(
+                  children: [
+                    const Text('🎈 User has registered successfully!'),
+                    Text(errorMessage),
+                  ],
+                ),
+                duration: const Duration(seconds: 15),
+                behavior: SnackBarBehavior.floating,
+                dismissDirection: DismissDirection.horizontal,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
+              ),
+            );
+          }
+        } else if (state is SocialAuthSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Column(
+                children: [
+                  const Text('🎈 User has registered successfully!'),
+                  Text(state.socialAuthSuccessMessage),
+                ],
+              ),
+              duration: const Duration(seconds: 15),
+              behavior: SnackBarBehavior.floating,
+              dismissDirection: DismissDirection.horizontal,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              margin: const EdgeInsets.only(bottom: 24, left: 16, right: 16),
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -140,18 +175,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     twitterxIconPath: twitterxIconPath,
                     linkedinIconPath: linkedinIconPath,
                     githubIconPath: githubIconPath,
-                    onTapOnGoogle: () async {
-                      await firebaseAuthService.signInWithGoogle();
-                      print('Google Sign In');
+                    onTapOnGoogle: () {
+                      context
+                          .read<AuthenticationBloc>()
+                          .add(const SocialAuthEvent(socialProvider: 'google'));
+                      print('📡 Google Sign In');
                     },
-                    onTapOnTwitterx: () async {
-                      await firebaseAuthService.signOut();
+                    onTapOnTwitterx: () {
+                      context.read<AuthenticationBloc>().add(LogoutEvent());
                       print('Google Sign Out');
                     },
                     onTapOnLinkedIn: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('🎈 Hello, LinkedIn!'),
+                        SnackBar(
+                          content: const Column(
+                            children: [
+                              Text('🎈 Hello, LinkedIn!'),
+                              Text('📝 info ...'),
+                            ],
+                          ),
+                          duration: const Duration(seconds: 15),
+                          behavior: SnackBarBehavior.floating,
+                          dismissDirection: DismissDirection.horizontal,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          margin: const EdgeInsets.only(
+                              bottom: 24, left: 16, right: 16),
                         ),
                       );
                     },

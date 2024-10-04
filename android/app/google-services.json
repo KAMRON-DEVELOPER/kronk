@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "364250418374-v0l41i35h7l45689je7t8vpfvhtek2h4.apps.googleusercontent.com",
+          "client_id": "364250418374-0k0m87ek4dk2vp5dtj0qrocpdi51k1th.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.kronk.kronk",
-            "certificate_hash": "2da7729d18b872f7d27a91629e346e6d917abba7"
+            "certificate_hash": "26ffd00ec8fa85e59731810bfae6977bcde925d3"
           }
         },
         {

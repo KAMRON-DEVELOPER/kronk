@@ -34,3 +34,16 @@ class LoginSubmitEvent extends AuthenticationEvent {
   @override
   List<Object> get props => [loginData];
 }
+
+class LogoutEvent extends AuthenticationEvent {}
+
+class ForgotPasswordSubmitEvent extends AuthenticationEvent {}
+
+class SocialAuthEvent extends AuthenticationEvent {
+  final String socialProvider;
+
+  const SocialAuthEvent({required this.socialProvider});
+
+  @override
+  List<Object> get props => [];
+}

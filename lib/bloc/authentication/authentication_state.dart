@@ -35,11 +35,13 @@ class AuthenticationFailure extends AuthenticationState {
   final String? registerFailureMessage;
   final String? loginFailureMessage;
   final String? verifyFailureMessage;
+  final String? socialAuthFailureMessage;
 
   const AuthenticationFailure({
     this.registerFailureMessage,
     this.verifyFailureMessage,
     this.loginFailureMessage,
+    this.socialAuthFailureMessage,
   });
 
   @override
@@ -48,4 +50,12 @@ class AuthenticationFailure extends AuthenticationState {
         verifyFailureMessage,
         loginFailureMessage,
       ];
+}
+
+class SocialAuthSuccess extends AuthenticationState {
+  final String socialAuthSuccessMessage;
+  const SocialAuthSuccess({required this.socialAuthSuccessMessage});
+
+  @override
+  List<Object?> get props => [];
 }
